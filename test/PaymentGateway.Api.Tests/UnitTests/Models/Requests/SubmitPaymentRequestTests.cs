@@ -42,7 +42,7 @@ internal class SubmitPaymentRequestTests
         var valid = ValidateModel(request, out var validationErrors);
 
         Assert.That(valid, Is.False);
-        Assert.That(validationErrors, Contains.Item("Amount must be non-negative."));
+        Assert.That(validationErrors, Contains.Item("Amount must be non-negative"));
     }
 
     #endregion
@@ -78,7 +78,7 @@ internal class SubmitPaymentRequestTests
         var valid = ValidateModel(request, out var validationErrors);
 
         Assert.That(valid, Is.False);
-        Assert.That(validationErrors, Contains.Item("CardNumber must be between 14 and 19 characters in length."));
+        Assert.That(validationErrors, Contains.Item("CardNumber must be between 14 and 19 characters in length"));
     }
 
     [TestCase("A2345678901234")]
@@ -93,7 +93,7 @@ internal class SubmitPaymentRequestTests
         var valid = ValidateModel(request, out var validationErrors);
 
         Assert.That(valid, Is.False);
-        Assert.That(validationErrors, Contains.Item("CardNumber must consist of only the digits 0 to 9."));
+        Assert.That(validationErrors, Contains.Item("CardNumber must consist of only the digits 0 to 9"));
     }
 
     #endregion
@@ -113,7 +113,18 @@ internal class SubmitPaymentRequestTests
         Assert.That(validationErrors, Is.Empty);
     }
 
-    [TestCase("")]
+    [Test]
+    [Description("Currency should be 3 characters long and consist of only capital letters.")]
+    public void TestCurrency_Required_Invalid()
+    {
+        var request = CreateRequest(currency: "");
+
+        var valid = ValidateModel(request, out var validationErrors);
+
+        Assert.That(valid, Is.False);
+        Assert.That(validationErrors, Is.Not.Empty);
+    }
+
     [TestCase("A")]
     [TestCase("AB")]
     [TestCase("ABCD")]
@@ -126,7 +137,7 @@ internal class SubmitPaymentRequestTests
         var valid = ValidateModel(request, out var validationErrors);
 
         Assert.That(valid, Is.False);
-        Assert.That(validationErrors, Contains.Item("Currency must be 3 characters in length."));
+        Assert.That(validationErrors, Contains.Item("Currency must be 3 characters in length"));
     }
 
     [TestCase("abc")]
@@ -141,7 +152,7 @@ internal class SubmitPaymentRequestTests
         var valid = ValidateModel(request, out var validationErrors);
 
         Assert.That(valid, Is.False);
-        Assert.That(validationErrors, Contains.Item("Currency must consist of capital letters A to Z."));
+        Assert.That(validationErrors, Contains.Item("Currency must consist of capital letters A to Z"));
     }
 
     #endregion
@@ -161,7 +172,18 @@ internal class SubmitPaymentRequestTests
         Assert.That(validationErrors, Is.Empty);
     }
 
-    [TestCase("")]
+    [Test]
+    [Description("Cvv should be 3 or 4 characters long and consist of only digits.")]
+    public void TestCvv_Required_Invalid()
+    {
+        var request = CreateRequest(cvv: "");
+
+        var valid = ValidateModel(request, out var validationErrors);
+
+        Assert.That(valid, Is.False);
+        Assert.That(validationErrors, Is.Not.Empty);
+    }
+
     [TestCase("1")]
     [TestCase("12")]
     [TestCase("12345")]
@@ -173,7 +195,7 @@ internal class SubmitPaymentRequestTests
         var valid = ValidateModel(request, out var validationErrors);
 
         Assert.That(valid, Is.False);
-        Assert.That(validationErrors, Contains.Item("Cvv must be 3 or 4 characters in length."));
+        Assert.That(validationErrors, Contains.Item("Cvv must be 3 or 4 characters in length"));
     }
 
     [TestCase("ABC")]
@@ -188,7 +210,7 @@ internal class SubmitPaymentRequestTests
         var valid = ValidateModel(request, out var validationErrors);
 
         Assert.That(valid, Is.False);
-        Assert.That(validationErrors, Contains.Item("Cvv must consist of only the digits 0 to 9."));
+        Assert.That(validationErrors, Contains.Item("Cvv must consist of only the digits 0 to 9"));
     }
 
     #endregion
@@ -222,7 +244,7 @@ internal class SubmitPaymentRequestTests
         var valid = ValidateModel(request, out var validationErrors);
 
         Assert.That(valid, Is.False);
-        Assert.That(validationErrors, Contains.Item("ExpiryMonth must be a valid month from 1 to 12."));
+        Assert.That(validationErrors, Contains.Item("ExpiryMonth must be a valid month from 1 to 12"));
     }
 
     #endregion
@@ -257,7 +279,7 @@ internal class SubmitPaymentRequestTests
         var valid = ValidateModel(request, out var validationErrors);
 
         Assert.That(valid, Is.False);
-        Assert.That(validationErrors, Contains.Item("ExpiryYear must be a four-digit year in the future."));
+        Assert.That(validationErrors, Contains.Item("ExpiryYear must be a four-digit year in the future"));
     }
 
     #endregion

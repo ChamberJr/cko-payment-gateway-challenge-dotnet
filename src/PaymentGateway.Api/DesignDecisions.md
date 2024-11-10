@@ -5,7 +5,7 @@
 ** Attempting to make class purpose singular
  
 * SubmitPaymentRequest
-** Using Microsoft's built in validation to reduce use of bespoke logic wherever possible. For validation not conveniently validatable (FutureMonth and CurrencyCode), using custom validation.
+** Using Microsoft's built in validation to reduce use of bespoke logic wherever possible. Swagger also recognises some of these attributes to make slightly better default field values. For validation not conveniently validatable (FutureMonth and CurrencyCode), using custom validation.
 ** CardNumber should be a string as the first digit can be 0. This would make length validation not make sense if reduced to an int. Also, the maximum int and long values are 19 digits or fewer.
 ** CardNumber validated using my own validation instead of the built-in CreditCard validation attribute to ensure I can match validation rules specified as closely as possible.
 ** Making PostPaymentRequest and PaymentDetails non-mutable for maintainability.
@@ -33,3 +33,8 @@
 
 * FutureMonthValidator
 ** Injecting a delegate to figure out current DateTime to make unit tests independent of real time
+
+* Program
+** Injecting URL as string - ideally it would be profiled config but that's not worth it for a single use application.
+** I've reused a lot of interfaces - the benefit is this ties more classes together conceptually and is more extensible and configurable, but the cost is DI is more explicitly managed.
+** I've supressed the automatic model validation filter as we have extra validation we want to perform, so we can do it all at once.
