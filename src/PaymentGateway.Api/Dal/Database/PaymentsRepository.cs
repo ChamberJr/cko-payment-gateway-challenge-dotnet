@@ -1,17 +1,17 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-
 using PaymentGateway.Api.Models.Responses;
 
-namespace PaymentGateway.Api.Services;
+namespace PaymentGateway.Api.Dal.Database;
 public interface IPaymentsRepository
 {
+    void AddPayment(PaymentDetails payment);
     bool TryGetPaymentDetails(Guid id, [NotNullWhen(true)] out PaymentDetails? paymentDetails);
 }
 
 public class PaymentsRepository : IPaymentsRepository
 {
     private static readonly Dictionary<Guid, PaymentDetails> Payments = [];
-    
+
     public void AddPayment(PaymentDetails payment)
     {
         Payments.Add(payment.Id, payment);

@@ -1,12 +1,12 @@
 ﻿namespace PaymentGateway.Api.Models.Responses;
 
-public class PaymentDetails
+public class PaymentDetails(Guid id, PaymentStatus status, string cardNumberLastFour, int expiryMonth, int expiryYear, string currency, long amount)
 {
-    public Guid Id { get; set; }
-    public PaymentStatus Status { get; set; }
-    public int CardNumberLastFour { get; set; }
-    public int ExpiryMonth { get; set; }
-    public int ExpiryYear { get; set; }
-    public string Currency { get; set; }
-    public int Amount { get; set; }
+    public Guid Id => id;
+    public PaymentStatus Status => status;
+    public string CardNumberLastFour => cardNumberLastFour;
+    public int ExpiryMonth => expiryMonth;
+    public int ExpiryYear => expiryYear;
+    public string Currency => currency;
+    public long Amount => amount;
 }

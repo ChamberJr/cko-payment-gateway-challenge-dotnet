@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace PaymentGateway.Api.Models.Requests;
+
+// Can't use these ValidationAttributes as will need to return Rejected
 public class SubmitPaymentRequest
 {
     [Required(ErrorMessage = $"{nameof(CardNumber)} is required.")]
@@ -13,7 +15,6 @@ public class SubmitPaymentRequest
     public required int ExpiryMonth { get; init; }
 
     [Required(ErrorMessage = $"{nameof(ExpiryYear)} is required.")]
-    // TODO: Figure out if there's a better way to configure the maximum year
     [Range(2024, 9999, ErrorMessage = $"{nameof(ExpiryYear)} must be a four-digit year in the future.")]
     public required int ExpiryYear { get; init; }
 
@@ -23,11 +24,11 @@ public class SubmitPaymentRequest
     public required string Currency { get; init; }
 
     [Required(ErrorMessage = $"{nameof(Amount)} is required.")]
-    [Range(0, int.MaxValue, ErrorMessage = $"{nameof(Amount)} must be positive.")]
-    public required int Amount { get; init; }
+    [Range(0, long.MaxValue, ErrorMessage = $"{nameof(Amount)} must be positive.")]
+    public required long Amount { get; init; }
 
     [Required(ErrorMessage = $"{nameof(Cvv)} is required.")]
     [StringLength(4, MinimumLength = 3, ErrorMessage = $"{nameof(Currency)} must be 3 or 4 characters in length.")]
     [RegularExpression("^[0-9]+$", ErrorMessage = $"{nameof(Currency)} must consist of only the digits 0 to 9.")]
-    public required int Cvv { get; init; }
+    public required string Cvv { get; init; }
 }
