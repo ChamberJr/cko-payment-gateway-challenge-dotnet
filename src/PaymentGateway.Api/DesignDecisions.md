@@ -9,12 +9,15 @@
 ** CardNumber should be a string as the first digit can be 0. This would make length validation not make sense if reduced to an int. Also, the maximum int and long values are 19 digits or fewer.
 ** CardNumber validated using my own validation instead of the built-in CreditCard validation attribute to ensure I can match validation rules specified as closely as possible.
 ** Making PostPaymentRequest and PaymentDetails non-mutable for maintainability.
-** Amount is a long as even though we would support £10,000 transactions by card, some currencies may have smaller denominations, e.g. Yuan or Yen
+** Amount is a long as even though we wouldn't support £1,000,000 transactions by card, some currencies may have smaller denominations, e.g. Yuan or Yen
 ** Amount can be 0 as we may just be interested in card validation rather than payment.
 ** Cvv is a string as it can start with 0.
 
 * PaymentDetails
 ** CardNumberLastFour is a string as it could start with 0.
+
+* PaymentDetailsCreator
+** Creating our own Guid for IDing instead of using AuthorizationCode, as I think it's worth storing Declined payments for auditing purposes, but Declined payments don't have an AuthorizationCode.
 
 * PaymentsRepository
 ** Modifying retriving payments to a TryGet to make success/failure results more explicit.
