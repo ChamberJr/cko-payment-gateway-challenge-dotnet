@@ -1,4 +1,4 @@
-﻿using PaymentGateway.Api.Dal.Database;
+﻿using PaymentGateway.Api.Dal;
 using PaymentGateway.Api.Externals;
 using PaymentGateway.Api.Models.Requests;
 

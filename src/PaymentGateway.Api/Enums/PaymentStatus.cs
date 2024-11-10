@@ -1,7 +1,7 @@
-namespace PaymentGateway.Api.Models;
+namespace PaymentGateway.Api.Enums;
 
 public enum PaymentStatus
 {
-    Authorized,
-    Declined
+    Authorized = 1,
+    Declined = 2
 }

@@ -12,11 +12,16 @@ namespace PaymentGateway.Api.Tests.UnitTests.Logic;
 [TestFixture]
 internal class PaymentSubmitterTests
 {
-    private const long Amount = 1;
-    private const string CardNumber = "CardNumber";
-    private const string Currency = "Currency";
-    private const string Cvv = "Cvv";
-    private const int Year = 2024;
+    private static readonly SubmitPaymentRequest Request = new() {
+        Amount = 1,
+        CardNumber = "CardNumber",
+        Currency = "Currency",
+        Cvv = "Cvv",
+        ExpiryMonth = 2,
+        ExpiryYear = 3
+    };
+
+    private static readonly PaymentSubmissionResult Result = PaymentSubmissionResult.Failure("Failure");
 
     private MockRepository _repository;
     private Mock<IValidator<SubmitPaymentRequest>> _validator;
@@ -28,29 +33,68 @@ internal class PaymentSubmitterTests
     public void SetUp()
     {
         _repository = new MockRepository(MockBehavior.Strict);
-        _creator = new BankSubmitPaymentRequestCreator();
+        _validator = _repository.Create<IValidator<SubmitPaymentRequest>>();
+        _validPaymentSubmitter = _repository.Create<IPaymentSubmitter>();
+
+        _submitter = new PaymentSubmitter(_validator.Object, _validPaymentSubmitter.Object);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        _repository.Verify();
     }
 
 
     [Test]
-    [Description("Most information should be transferred without modification.")]
-    public void TestCreate_GeneralInformation()
+    [Description("Valid requests should be submitted and returned as-is.")]
+    public async Task TestSubmitPayment_ValidRequest()
     {
-        var request = new SubmitPaymentRequest
-        {
-            Amount = Amount,
-            CardNumber = CardNumber,
-            Currency = Currency,
-            Cvv = Cvv,
-            ExpiryMonth = 1,
-            ExpiryYear = Year
-        };
+        SetUpValidate(true, []);
+        SetUpSubmitPayment();
 
-        var result = _creator.Create(request);
+        var result = await _submitter.SubmitPayment(Request);
 
-        Assert.That(result.Amount, Is.EqualTo(Amount));
-        Assert.That(result.CardNumber, Is.EqualTo(CardNumber));
-        Assert.That(result.Currency, Is.EqualTo(Currency));
-        Assert.That(result.Cvv, Is.EqualTo(Cvv));
+        Assert.That(result, Is.EqualTo(Result));
+    }
+
+    [Test]
+    [Description("Invalid requests should be failures, and if there are no errors, this should be stated.")]
+    public async Task TestSubmitPayment_InvalidRequestWithoutErrors()
+    {
+        SetUpValidate(false, []);
+
+        var result = await _submitter.SubmitPayment(Request);
+
+        Assert.That(result.Successful, Is.False);
+        Assert.That(result.ValidationErrorMessage, Is.EqualTo("Payment rejected because request was invalid. Unable to find reason for invalid request."));
+    }
+
+    [Test]
+    [Description("Invalid requests should be failures, and if there are errors, they should be stated.")]
+    public async Task TestSubmitPayment_InvalidRequestWithErrors()
+    {
+        SetUpValidate(false, ["ErrorReason1", "ErrorReason2"]);
+
+        var result = await _submitter.SubmitPayment(Request);
+
+        Assert.That(result.Successful, Is.False);
+        Assert.That(result.ValidationErrorMessage, Is.EqualTo("Payment rejected because request was invalid. Invalid reasons: ErrorReason1, ErrorReason2"));
+    }
+
+    private void SetUpValidate(bool result, List<string> validationErrors)
+    {
+        _validator
+            .Setup(x => x.Validate(Request, out validationErrors))
+            .Returns(result)
+            .Verifiable();
+    }
+
+    private void SetUpSubmitPayment()
+    {
+        _validPaymentSubmitter
+            .Setup(x => x.SubmitPayment(Request))
+            .ReturnsAsync(Result)
+            .Verifiable();
     }
 }

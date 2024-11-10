@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentGateway.Api.Dal.Database;
+
+using PaymentGateway.Api.Dal;
 using PaymentGateway.Api.Logic;
 using PaymentGateway.Api.Models.Requests;
 using PaymentGateway.Api.Models.Responses;

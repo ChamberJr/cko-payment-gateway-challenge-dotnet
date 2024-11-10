@@ -1,4 +1,4 @@
-using PaymentGateway.Api.Dal.Database;
+using PaymentGateway.Api.Dal;
 
 var builder = WebApplication.CreateBuilder(args);
 

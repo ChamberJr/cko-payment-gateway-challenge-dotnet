@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+
 using PaymentGateway.Api.Models.Responses;
 
-namespace PaymentGateway.Api.Dal.Database;
+namespace PaymentGateway.Api.Dal;
 public interface IPaymentsRepository
 {
     void AddPayment(PaymentDetails payment);
@@ -10,7 +11,7 @@ public interface IPaymentsRepository
 
 public class PaymentsRepository : IPaymentsRepository
 {
-    private static readonly Dictionary<Guid, PaymentDetails> Payments = [];
+    private readonly Dictionary<Guid, PaymentDetails> Payments = [];
 
     public void AddPayment(PaymentDetails payment)
     {

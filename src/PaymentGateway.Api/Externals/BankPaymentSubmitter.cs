@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 
+using PaymentGateway.Api.Exceptions;
+
 namespace PaymentGateway.Api.Externals;
 
 public interface IBankPaymentSubmitter
@@ -7,18 +9,17 @@ public interface IBankPaymentSubmitter
     Task<BankSubmitPaymentResponse> Submit(BankSubmitPaymentRequest request);
 }
 
-public class BankPaymentSubmitter(string url) : IBankPaymentSubmitter
+public class BankPaymentSubmitter(IHttpClientFactory httpClientFactory, string url) : IBankPaymentSubmitter
 {
-    private static readonly HttpClient HttpClient = new();
-
     public async Task<BankSubmitPaymentResponse> Submit(BankSubmitPaymentRequest request)
     {
-        var response = await HttpClient.PostAsJsonAsync(url, request, CancellationToken.None);
+        var httpClient = httpClientFactory.CreateClient("BankPaymentSubmitterClient");
+
+        var response = await httpClient.PostAsJsonAsync(url, request, CancellationToken.None);
 
         if (response == null || !response.IsSuccessStatusCode)
         {
-            // TODO - make this custom
-            throw new InvalidOperationException();
+            throw new PaymentProcessingException("Request to bank was not successful.");
         }
 
         var content = await response.Content.ReadAsStringAsync();
@@ -27,8 +28,7 @@ public class BankPaymentSubmitter(string url) : IBankPaymentSubmitter
 
         if (parsedContent == null)
         {
-            // TODO - make this custom
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Request to bank was successful but was unable to parse the response data and could not store it.");
         }
 
         return parsedContent;

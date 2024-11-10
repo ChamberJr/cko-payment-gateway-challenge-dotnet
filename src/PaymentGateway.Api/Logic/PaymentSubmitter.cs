@@ -39,7 +39,7 @@ public class PaymentSubmitter(
 
         var validationErrorMessagePrefix = $"Payment rejected because request was invalid. ";
 
-        var validationErrorMessagePostfix = validationErrors.Count == 1
+        var validationErrorMessagePostfix = validationErrors.Count == 0
             ? "Unable to find reason for invalid request."
             : $"Invalid reasons: {string.Join(", ", validationErrors)}";
 

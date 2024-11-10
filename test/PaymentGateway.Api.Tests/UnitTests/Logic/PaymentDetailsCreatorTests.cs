@@ -1,8 +1,7 @@
 ﻿using NUnit.Framework;
-
+using PaymentGateway.Api.Enums;
 using PaymentGateway.Api.Externals;
 using PaymentGateway.Api.Logic;
-using PaymentGateway.Api.Models;
 using PaymentGateway.Api.Models.Requests;
 
 namespace PaymentGateway.Api.Tests.UnitTests.Logic;

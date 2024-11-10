@@ -4,7 +4,8 @@
 ** Could make Validation more general by using an AggregateValidator, but probably not worth it for a single use and only 2 validations.
 ** Attempting to make class purpose singular
  
-* PostPaymentRequest
+* SubmitPaymentRequest
+** Using Microsoft's built in validation to reduce use of bespoke logic wherever possible. For validation not conveniently validatable (FutureMonth and CurrencyCode), using custom validation.
 ** CardNumber should be a string as the first digit can be 0. This would make length validation not make sense if reduced to an int. Also, the maximum int and long values are 19 digits or fewer.
 ** CardNumber validated using my own validation instead of the built-in CreditCard validation attribute to ensure I can match validation rules specified as closely as possible.
 ** Making PostPaymentRequest and PaymentDetails non-mutable for maintainability.
@@ -28,3 +29,7 @@
 
 * PaymentStatus
 ** Removing Rejected from PaymentStatus as it's never the status of a real payment
+** Stating enum numbers explicitly to avoid Authorized being the default enum value of 0
+
+* FutureMonthValidator
+** Injecting a delegate to figure out current DateTime to make unit tests independent of real time

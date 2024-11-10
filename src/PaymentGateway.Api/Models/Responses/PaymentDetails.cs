@@ -1,4 +1,6 @@
-﻿namespace PaymentGateway.Api.Models.Responses;
+﻿using PaymentGateway.Api.Enums;
+
+namespace PaymentGateway.Api.Models.Responses;
 
 public class PaymentDetails(Guid id, PaymentStatus status, string cardNumberLastFour, int expiryMonth, int expiryYear, string currency, long amount)
 {

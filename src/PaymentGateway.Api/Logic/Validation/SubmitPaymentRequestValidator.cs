@@ -9,10 +9,13 @@ public class SubmitPaymentRequestValidator(
 {
     public bool Validate(SubmitPaymentRequest model, out List<string> validationErrors)
     {
-        var modelValid = modelValidator.Validate(model, out validationErrors);
+        var modelValid = modelValidator.Validate(model, out var modelValidationErrors);
         var futureMonthValid = futureMonthValidator.Validate(model, out var futureMonthValidationErrors);
         var currencyCodeValid = currencyCodeValidator.Validate(model.Currency, out var currencyCodeValidationErrors);
 
+        validationErrors = [];
+
+        validationErrors.AddRange(modelValidationErrors);
         validationErrors.AddRange(futureMonthValidationErrors);
         validationErrors.AddRange(currencyCodeValidationErrors);
 

@@ -6,7 +6,6 @@ public class ModelValidator : IValidator<object>
 {
     public bool Validate(object model, out List<string> validationErrors)
     {
-
         var context = new ValidationContext(model, null, null);
         var validationResults = new List<ValidationResult>();
 
@@ -17,6 +16,6 @@ public class ModelValidator : IValidator<object>
             .Select(x => x.ErrorMessage!)
             .ToList();
 
-        return validationErrors.Count != 0;
+        return isValid;
     }
 }
