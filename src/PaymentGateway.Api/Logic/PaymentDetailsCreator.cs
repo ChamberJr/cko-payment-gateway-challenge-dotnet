@@ -10,11 +10,11 @@ public interface IPaymentDetailsCreator
     PaymentDetails Create(SubmitPaymentRequest request, BankSubmitPaymentResponse response);
 }
 
-public class PaymentDetailsCreator : IPaymentDetailsCreator
+public class PaymentDetailsCreator(Func<Guid> getUniqueGuid) : IPaymentDetailsCreator
 {
     public PaymentDetails Create(SubmitPaymentRequest request, BankSubmitPaymentResponse response)
     {
-        var id = new Guid(response.AuthorizationCode);
+        var id = getUniqueGuid();
         var paymentStatus = response.Authorized ? PaymentStatus.Authorized : PaymentStatus.Declined;
         var cardNumberLastFour = request.CardNumber.Substring(request.CardNumber.Length - 4);
 

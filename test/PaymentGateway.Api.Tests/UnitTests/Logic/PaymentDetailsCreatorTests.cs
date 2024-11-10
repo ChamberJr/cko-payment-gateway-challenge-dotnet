@@ -10,7 +10,7 @@ namespace PaymentGateway.Api.Tests.UnitTests.Logic;
 [TestFixture]
 internal class PaymentDetailsCreatorTests
 {
-    private const string AuthorizationCode = "aaaaaaaa-6d44-4b50-a14f-7ae0beff13ad";
+    private const string AuthorizationCode = "AuthorizationCode";
     private const long Amount = 1;
     private const string CardNumber = "CardNumber";
     private const string Currency = "Currency";
@@ -18,6 +18,7 @@ internal class PaymentDetailsCreatorTests
     private const int Month = 12;
     private const int Year = 2024;
 
+    private static readonly Guid Guid = new("aaaaaaaa-6d44-4b50-a14f-7ae0beff13ad");
     private static readonly SubmitPaymentRequest Request = new()
         {
             Amount = Amount,
@@ -33,7 +34,7 @@ internal class PaymentDetailsCreatorTests
     [SetUp]
     public void SetUp()
     {
-        _creator = new PaymentDetailsCreator();
+        _creator = new PaymentDetailsCreator(() => Guid);
     }
 
 
@@ -43,7 +44,7 @@ internal class PaymentDetailsCreatorTests
     {
         var result = _creator.Create(Request, CreateResponse(true));
 
-        Assert.That(result.Id.ToString(), Is.EqualTo(AuthorizationCode));
+        Assert.That(result.Id, Is.EqualTo(Guid));
         Assert.That(result.Amount, Is.EqualTo(Amount));
         Assert.That(result.Currency, Is.EqualTo(Currency));
         Assert.That(result.ExpiryMonth, Is.EqualTo(Month));

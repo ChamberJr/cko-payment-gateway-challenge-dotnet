@@ -23,6 +23,7 @@ builder.Services
     .AddSingleton<FutureMonthValidator>()
     .AddSingleton<ModelValidator>()
     .AddSingleton<ValidPaymentSubmitter>()
+    .AddSingleton(Guid.NewGuid)
     .AddSingleton(() => DateTime.UtcNow)
     .AddSingleton<IBankPaymentSubmitter>(
         provider => new BankPaymentSubmitter(
