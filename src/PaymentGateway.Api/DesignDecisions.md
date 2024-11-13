@@ -5,6 +5,7 @@
     * In a larger solution I would consider splitting the solution into Web Layer/Data Access Layer/Logic Layer for lower coupling and dependency inversion. However, given that the scope of this solution is very small, this would complicate things for little benefit.
     * Attempting to make class purpose singular
     * Running on IIS Express for local setup, as I don't know any required server configuration.
+    * It's ambiguous as to whose responsiblity it is to keep track of the denomination of the currency. If the consumer has sent in Amount: 10 and Currency: GBP, does that mean £10 or 10p? I've assumed the merchant handles this for now, and all data is sent in the minor currency unit.
  
 * SubmitPaymentRequest
     * Using Microsoft's built in validation to reduce use of bespoke logic wherever possible. Swagger also recognises some of these attributes to make slightly better default field values. For validation not conveniently validatable (FutureMonth and CurrencyCode), using custom validation.
