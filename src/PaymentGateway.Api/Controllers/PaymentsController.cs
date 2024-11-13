@@ -6,7 +6,6 @@ using PaymentGateway.Api.Models.Responses;
 
 namespace PaymentGateway.Api.Controllers;
 
-// TODO: Unit Test controller
 [Route("api/[controller]", Name = "Payments")]
 [ApiController]
 public class PaymentsController(IPaymentsRepository paymentsRepository, IPaymentSubmitter paymentSubmitter) : ControllerBase

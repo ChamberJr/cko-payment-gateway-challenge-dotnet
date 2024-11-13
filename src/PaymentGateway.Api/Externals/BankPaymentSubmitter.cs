@@ -28,7 +28,7 @@ public class BankPaymentSubmitter(IHttpClientFactory httpClientFactory, string u
 
         if (parsedContent == null)
         {
-            throw new InvalidOperationException("Request to bank was successful but was unable to parse the response data and could not store it.");
+            throw new PaymentProcessingException("Request to bank was successful but was unable to parse the response data and could not store it.");
         }
 
         return parsedContent;

@@ -1,9 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-
-using PaymentGateway.Api.Dal;
-using PaymentGateway.Api.Externals;
-using PaymentGateway.Api.Logic;
-using PaymentGateway.Api.Logic.Validation;
+using PaymentGateway.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,31 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services
-    .AddSingleton<IPaymentsRepository, PaymentsRepository>()
-    .AddSingleton<IBankSubmitPaymentRequestCreator, BankSubmitPaymentRequestCreator>()
-    .AddSingleton<IPaymentDetailsCreator, PaymentDetailsCreator>()
-    .AddSingleton<CurrencyCodeValidator>()
-    .AddSingleton<FutureMonthValidator>()
-    .AddSingleton<ModelValidator>()
-    .AddSingleton<ValidPaymentSubmitter>()
-    .AddSingleton(Guid.NewGuid)
-    .AddSingleton(() => DateTime.UtcNow)
-    .AddSingleton<IBankPaymentSubmitter>(
-        provider => new BankPaymentSubmitter(
-            provider.GetService<IHttpClientFactory>()!,
-            "http://localhost:8080/payments"))
-    .AddSingleton<IPaymentSubmitter>(
-        provider => new PaymentSubmitter(
-            provider.GetService<SubmitPaymentRequestValidator>()!,
-            provider.GetService<ValidPaymentSubmitter>()!
-            ))
-    .AddSingleton(
-        provider => new SubmitPaymentRequestValidator(
-            provider.GetService<ModelValidator>()!,
-            provider.GetService<FutureMonthValidator>()!,
-            provider.GetService<CurrencyCodeValidator>()!))
-    ;
+ServiceRegistration.Register(builder.Services);
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {

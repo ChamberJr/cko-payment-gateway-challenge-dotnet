@@ -34,10 +34,17 @@
 ** Removing Rejected from PaymentStatus as it's never the status of a real payment
 ** Stating enum numbers explicitly to avoid Authorized being the default enum value of 0
 
+* IValidator
+** Using in keyword to allow contravariance on type T
+
 * FutureMonthValidator
 ** Injecting a delegate to figure out current DateTime to make unit tests independent of real time
 
 * Program
+** I've supressed the automatic model validation filter as we have extra validation we want to perform, so we can do it all at once.
+
+* ServiceRegistration
+** Pulling service registration out of Program to split responsibilities
+** Adding two ways to register services to aid testing
 ** Injecting URL as string - ideally it would be profiled config but that's not worth it for a single use application.
 ** I've reused a lot of interfaces - the benefit is this ties more classes together conceptually and is more extensible and configurable, but the cost is DI is more explicitly managed.
-** I've supressed the automatic model validation filter as we have extra validation we want to perform, so we can do it all at once.

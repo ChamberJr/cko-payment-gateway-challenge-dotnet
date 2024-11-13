@@ -98,7 +98,5 @@ internal class BankPaymentSubmitterTests
             .Setup<Task<HttpResponseMessage>>(nameof(_httpClient.SendAsync), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(result)
             .Verifiable();
-        //_httpMessageHandler
-        //    .Setup(x => x.)
     }
 }
