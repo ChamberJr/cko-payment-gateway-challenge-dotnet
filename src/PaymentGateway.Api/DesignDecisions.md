@@ -49,7 +49,7 @@
     * Injecting an IHttpClientFactory in to allow unit testing.
 
 * Program
-    * I've supressed the automatic model validation filter as we have extra validation we want to perform, so we can do it all at once.
+    * I've suppressed the automatic model validation filter as we have extra validation we want to perform, so we can do it all at once.
 
 * ServiceRegistration
     * Pulling service registration out of Program to split responsibilities
