@@ -1,26 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using PaymentGateway.Api.Dal;
+using PaymentGateway.Api.Logic;
+using PaymentGateway.Api.Models.Requests;
 using PaymentGateway.Api.Models.Responses;
-using PaymentGateway.Api.Services;
 
 namespace PaymentGateway.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PaymentsController : Controller
+public class PaymentsController(IPaymentsRepository paymentsRepository, IPaymentSubmitter paymentSubmitter) : ControllerBase
 {
-    private readonly PaymentsRepository _paymentsRepository;
-
-    public PaymentsController(PaymentsRepository paymentsRepository)
+    [HttpPost]
+    public async Task<ActionResult<PaymentDetails>> SubmitPayment(SubmitPaymentRequest request)
     {
-        _paymentsRepository = paymentsRepository;
+        var paymentSubmissionResult = await paymentSubmitter.SubmitPayment(request);
+
+        return paymentSubmissionResult.Successful
+            ? CreatedAtRoute("GetPayment", new { id = paymentSubmissionResult.PaymentDetails.Id }, paymentSubmissionResult.PaymentDetails)
+            : BadRequest(paymentSubmissionResult.ValidationErrorMessage);
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<PostPaymentResponse?>> GetPaymentAsync(Guid id)
+    [HttpGet]
+    [Route("{id:guid}", Name = "GetPayment")]
+    public ActionResult<PaymentDetails> GetPayment(Guid id)
     {
-        var payment = _paymentsRepository.Get(id);
-
-        return new OkObjectResult(payment);
+        return paymentsRepository.TryGetPaymentDetails(id, out var paymentDetails)
+            ? Ok(paymentDetails)
+            : NotFound();
     }
 }
