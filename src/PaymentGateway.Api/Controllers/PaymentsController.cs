@@ -6,7 +6,7 @@ using PaymentGateway.Api.Models.Responses;
 
 namespace PaymentGateway.Api.Controllers;
 
-[Route("api/[controller]", Name = "Payments")]
+[Route("api/[controller]")]
 [ApiController]
 public class PaymentsController(IPaymentsRepository paymentsRepository, IPaymentSubmitter paymentSubmitter) : ControllerBase
 {
@@ -16,11 +16,12 @@ public class PaymentsController(IPaymentsRepository paymentsRepository, IPayment
         var paymentSubmissionResult = await paymentSubmitter.SubmitPayment(request);
 
         return paymentSubmissionResult.Successful
-            ? CreatedAtRoute("Payments", new { id = paymentSubmissionResult.PaymentDetails.Id }, paymentSubmissionResult.PaymentDetails)
+            ? CreatedAtRoute("GetPayment", new { id = paymentSubmissionResult.PaymentDetails.Id }, paymentSubmissionResult.PaymentDetails)
             : BadRequest(paymentSubmissionResult.ValidationErrorMessage);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet]
+    [Route("{id:guid}", Name = "GetPayment")]
     public ActionResult<PaymentDetails> GetPayment(Guid id)
     {
         return paymentsRepository.TryGetPaymentDetails(id, out var paymentDetails)
