@@ -106,6 +106,9 @@ internal class PaymentsControllerTests
         var value = createdResult.Value;
         Assert.That(value, Is.EqualTo(PaymentDetails));
         Assert.That(createdResult.RouteName, Is.EqualTo("Payments"));
+        Assert.That(createdResult.RouteValues, Has.Exactly(1).Items);
+        Assert.That(createdResult.RouteValues.Single().Key, Is.EqualTo("id"));
+        Assert.That(createdResult.RouteValues.Single().Value, Is.EqualTo(Id));
     }
 
     private void SetUpSubmitPaymentRequest(PaymentSubmissionResult result)

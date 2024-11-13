@@ -16,7 +16,7 @@ public class PaymentsController(IPaymentsRepository paymentsRepository, IPayment
         var paymentSubmissionResult = await paymentSubmitter.SubmitPayment(request);
 
         return paymentSubmissionResult.Successful
-            ? CreatedAtRoute("Payments", paymentSubmissionResult.PaymentDetails)
+            ? CreatedAtRoute("Payments", new { id = paymentSubmissionResult.PaymentDetails.Id }, paymentSubmissionResult.PaymentDetails)
             : BadRequest(paymentSubmissionResult.ValidationErrorMessage);
     }
 
