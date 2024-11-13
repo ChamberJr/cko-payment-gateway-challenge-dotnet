@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-
 using PaymentGateway.Api.Exceptions;
 
 namespace PaymentGateway.Api.Externals;
